@@ -16,8 +16,9 @@ def main():
     start_time = datetime.now()
     options = parser.parse_args()
 
-    print_out = "import os\n\n"
-    print_out += "#--------------------------------------------------------------------------------------------------\n"
+    import_out = "import os\n"
+    import_out += "from " + str(options.i.split("/")[-1].split(".")[0]) + " import "
+    print_out = "#--------------------------------------------------------------------------------------------------\n"
     print_out += "# def curator; written by dylan fox 20180621; version 1.0.0.0\n"
     print_out += "#--------------------------------------------------------------------------------------------------\n\n"
     print_out += "#ex:\n"
@@ -46,6 +47,7 @@ def main():
                     print_out += "\toutput:\n"
                     print_out += "\t\'\'\'\n"
                     print_out += "\t" + str(c[4:].split(":")[0]) + "\n"
+                    import_out += str(c[4:].split("(")[0]) + ", "
                 elif c[0:5] == "class":
                     class_found = True
                     def_found = False
@@ -57,6 +59,7 @@ def main():
                     print_out += "\toutput:\n"
                     print_out += "\t\'\'\'\n"
                     print_out += "\t" + str(c[6:].split(":")[0]) + " #class\n"
+                    import_out += str(c[6:].split(":")[0].split("(")[0]) + ", "
 
             elif class_found:
                 if class_def_found:
@@ -80,6 +83,7 @@ def main():
                         print_out += "\toutput:\n"
                         print_out += "\t\'\'\'\n"
                         print_out += "\t" + str(c[4:].split(":")[0]) + "\n"
+                        import_out += str(c[4:].split("(")[0]) + ", "
                         class_def_found = False
                         def_found = True
                         class_found = False
@@ -94,6 +98,7 @@ def main():
                         print_out += "\toutput:\n"
                         print_out += "\t\'\'\'\n"
                         print_out += "\t" + str(c[6:].split(":")[0]) + " #class\n"
+                        import_out += str(c[6:].split(":")[0].split("(")[0]) + ", "
                 else:
                     if c[0:7] == "    def":
                         class_def_found = True
@@ -112,6 +117,7 @@ def main():
                         print_out += "\toutput:\n"
                         print_out += "\t\'\'\'\n"
                         print_out += "\t" + str(c[4:].split(":")[0]) + "\n"
+                        import_out += str(c[4:].split("(")[0]) + ", "
                         class_def_found = False
                         def_found = True
                         class_found = False
@@ -120,12 +126,13 @@ def main():
                         def_found = False
                         class_def_found = False
                         print_out += "\n\n\t\'\'\'--------------------------------------------------------------------------------------------\n"
-                        print_out += "\ttitle: " + str(c[4:].split("(")[0]) + "\n"
+                        print_out += "\ttitle: " + str(c[6:].split(":")[0].split("(")[0]) + "\n"
                         print_out += "\tfunction:\n"
                         print_out += "\tinput:\n"
                         print_out += "\toutput:\n"
                         print_out += "\t\'\'\'\n"
                         print_out += "\t" + str(c[6:].split(":")[0]) + " #class\n"
+                        import_out += str(c[6:].split(":")[0].split("(")[0]) + ", "
             else:
                 if c[0:3] == "def":
                     def_found = True
@@ -137,6 +144,7 @@ def main():
                     print_out += "\toutput:\n"
                     print_out += "\t\'\'\'\n"
                     print_out += "\t" + str(c[4:].split(":")[0]) + "\n"
+                    import_out += str(c[4:].split("(")[0]) + ", "
                 elif c[0:5] == "class":
                     class_found = True
                     def_found = False
@@ -147,9 +155,12 @@ def main():
                     print_out += "\toutput:\n"
                     print_out += "\t\'\'\'\n"
                     print_out += "\t" + str(c[6:].split(":")[0]) + " #class\n"
+                    import_out += str(c[6:].split(":")[0].split("(")[0]) + ", "
     print_out += "#--------------------------------------------------------------------------------------------------\n"
     print_out += "if __name__ == \"__main__\":\n"
     print_out += "\tmain()\n"
+
+    print_out = str(import_out) + "\n\n" + str(print_out) 
     
     out_file = str(options.i.split(".")[0]) + "_defs.py"
 
